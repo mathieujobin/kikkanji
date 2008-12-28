@@ -1,0 +1,122 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KikkanjiDlg</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>main_dlg</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>221</width>
+            <height>364</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>きっかんじ</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="resizeMode">
+            <enum>Minimum</enum>
+        </property>
+        <widget class="QFrame" row="0" column="0">
+            <property name="name">
+                <cstring>main_frame</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>3</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="frameShape">
+                <enum>StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QFrame">
+                    <property name="name">
+                        <cstring>top_frame</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>StyledPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Raised</enum>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>kanji_label</cstring>
+                            </property>
+                            <property name="text">
+                                <string>textLabel1</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>toggle_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>pushButton1</string>
+                    </property>
+                </widget>
+                <widget class="QFrame">
+                    <property name="name">
+                        <cstring>bottom_frame</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>StyledPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Raised</enum>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>notes_label</cstring>
+                            </property>
+                            <property name="text">
+                                <string>textLabel2</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </vbox>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>toggle_button</sender>
+        <signal>released()</signal>
+        <receiver>main_dlg</receiver>
+        <slot>toggle_bottom()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">main_dlg.ui.h</include>
+</includes>
+<slots>
+    <slot>toggle_bottom()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
