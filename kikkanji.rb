@@ -1,10 +1,12 @@
 #!/usr/bin/env ruby -w
 
-# require 'korundum'
 $KCODE = 'u'
 require 'jcode'
-require 'active_record'
-require 'Qt'
+require 'rubygems'
+require 'activerecord'
+#require 'Qt'
+#require 'KDE/korundum4'
+#require 'KDE/plasma'
 require 'main_dlg'
 
 # create main application object
