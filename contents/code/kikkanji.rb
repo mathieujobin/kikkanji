@@ -1,6 +1,11 @@
-# Mathieu Jobin - 2009-02-04 - GPL 
+# Mathieu Jobin - 2009-02-04 - GPL
+# 2006.05.16 : First version QtRuby 3
+#              goal was to be a kicker applet but QtRuby was not ready at the time so I made a main window.
+# 2008-12-28 : imported code into svn
+# 2009-02-04 : Debut port to plasma
+# 2009-02-06 : First working stable version (missing is the resize event, a timer, a config dialog and a plasma app icon)
 #/usr/bin/env ruby -w
- 
+
 $KCODE = 'u'
 require 'jcode'
 require 'rubygems'
@@ -27,7 +32,7 @@ class Kikkanji < PlasmaScripting::Applet
 	def init
 		self.has_configuration_interface = false
 		resize 270, 270
-	#	self.aspect_ratio_mode = Plasma::Square
+		#self.aspect_ratio_mode = Plasma::Square
 
 		@kanjis = Kanji.find(:all)
 		array_of_id = (0..(kanjis.size-1))
@@ -45,6 +50,7 @@ class Kikkanji < PlasmaScripting::Applet
 		data = Plasma::ToolTipContent.new
 		data.mainText = @cur_text
 		data.subText = @tooltip_content
+		#Plasma::ToolTipManager::self.set_font(applet_script.applet, @font)
 		#data.image = KIcon("some-icon").pixmap(IconSize(KIconLoader::Desktop))
 		Plasma::ToolTipManager::self.set_content(applet_script.applet, data)
 
