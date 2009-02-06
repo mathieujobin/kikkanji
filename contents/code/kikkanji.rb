@@ -1,112 +1,87 @@
-#!/usr/bin/env ruby -w
-
+# Mathieu Jobin - 2009-02-04 - GPL 
+#/usr/bin/env ruby -w
+ 
 $KCODE = 'u'
 require 'jcode'
 require 'rubygems'
 require 'activerecord'
-#require 'Qt'
-#require 'KDE/korundum4'
-#require 'KDE/plasma'
-require 'main_dlg'
+require 'plasma_applet'
 
-# create main application object
-app = Qt::Application.new(ARGV)
-
-DB_FILE = 'kanji.kexi'
-ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database  => DB_FILE)
+DB_FILE = 'contents/code/kanji.kexi'
+ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => DB_FILE)
 class Kanji < ActiveRecord::Base
 end
 
-class KikkanjiDlg
-	attr_accessor :bottom_is_shown
-	def toggle_bottom(*k)
-		if @bottom_is_shown
-			@toggle_button.setText('Show details')
-			@bottom_frame.hide
-			@bottom_is_shown=false
-			self.setMinimumHeight(300)
-			self.setMaximumHeight(300)
-		else
-			@toggle_button.setText('Hide details')
-			@bottom_frame.show
-			self.setMinimumHeight(500)
-			self.setMaximumHeight(500)
-			@bottom_is_shown=true
-		end
-	end
+def info(anything)
+	puts [anything, anything.methods.sort].inspect
 end
 
-class Kikkanji < KikkanjiDlg # Qt::Label
+module Kikkanji
+class Kikkanji < PlasmaScripting::Applet
 	attr_accessor :kanjis, :reordered_ids, :current, :text_codec
 
-	def initialize
-		super(nil)
+	def initialize parent
+		super parent
+	end
 
-		#@kanjis = Kikkanji.kanjis_from_db
-		#@kanjis = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-		@kanjis = Kanji.find_all
+	def init
+		self.has_configuration_interface = false
+		resize 270, 270
+	#	self.aspect_ratio_mode = Plasma::Square
+
+		@kanjis = Kanji.find(:all)
 		array_of_id = (0..(kanjis.size-1))
 		@reordered_ids = array_of_id.sort_by { rand }
 		@current = 0
+		@cur_text = "haha"
+		#info self
+		#info applet_script
+		#info applet_script.applet
+		#info applet_script.applet.window
+		@font = Qt::Font.new('Helvetica', applet_script.applet.size.width/2)
 
-
-		@kanji_label.setText('')
 		display_new_kanji
-		@kanji_label.setFont(Qt::Font.new('Helvetica', 128))
-		@kanji_label.setAlignment(Qt::AlignHCenter + Qt::AlignVCenter)
-		@kanji_label.setMinimumSize(200, 200)
-		@bottom_is_shown = true
-		toggle_bottom(nil)
-		#t = Qt::Timer.new
-		#connect(t, SIGNAL('timeout()'), SLOT('display_new_kanji()'))
-		#t.start(1000, false)
 
-		#connect(self, SIGNAL('clicked()'), SLOT('display_new_kanji()'))
+		data = Plasma::ToolTipContent.new
+		data.mainText = @cur_text
+		data.subText = @tooltip_content
+		#data.image = KIcon("some-icon").pixmap(IconSize(KIconLoader::Desktop))
+		Plasma::ToolTipManager::self.set_content(applet_script.applet, data)
+
 	end
 
+	def resizeEvent(e)
+		puts ["resized ", e].inspect
+		@font = Qt::Font.new('Helvetica', applet_script.applet.size.width/2)
+	end
 	def mouseReleaseEvent(e)
 		display_new_kanji
 	end
+	def mouseMoveEvent(e); end
+	def mousePressEvent(e); end
 
-	# get list of kanjis from Database
-	def self.kanjis_from_db
-		ret = []
-		@text_codec = Qt::TextCodec.codecForName('eucJP')
-		db = Qt::SqlDatabase.addDatabase('QSQLITE3')
-		db.setDatabaseName(DB_FILE)
-		db.open
-		query = Qt::SqlQuery.new('select kanji from kanjis')
-		if query.isActive
-			while query.next
-				#ret << @text_codec.toUnicode(query.value(0).toCString)
-				ret << query.value(0).toString
-			end
-		end
-		ret
+	def paintInterface(painter, option, rect)
+		painter.save
+		painter.font = @font
+		painter.pen = Qt::Color.new Qt::white
+		painter.draw_text rect, Qt::AlignVCenter | Qt::AlignHCenter, @cur_text
+		painter.restore
+		#puts "redrawing...."
 	end
 
 	def display_new_kanji
-		@current = 0 if @current == @kanjis.size
+		#puts "new kanji please ..."
+		@current = 0 if @current.to_i == @kanjis.size
 		k = @kanjis[@reordered_ids[@current]]
 		ji = k[:kanji]
-		@kanji_label.setText(ji)
-		Qt::ToolTip::remove(self)
+		@cur_text = ji
 		content_attr = k.attributes.collect{|k,v| "<b>#{k}</b>:#{v}" unless v.to_s.empty? }.join('</li><li>')
 		content_attr = "<ul><li>#{content_attr}</li></ul>" unless content_attr.to_s.empty?
-		content = "<p><h1>#{ji}</h1>#{content_attr}</p>"
-		# content = k.to_yaml
-		Qt::ToolTip::add(@kanji_label, content)
-		@notes_label.setText(content)
-		@current += 1
+		@tooltip_content = "<p><h1>#{ji}</h1>#{content_attr}</p>"
+		@current = @current.nil? ? 1 : @current + 1
+		update
 	end
-	slots 'display_new_kanji()'
+
+end
 end
 
-# run the program
-mw = Kikkanji.new
-app.mainWidget = mw
-mw.show
-app.exec
-
-
-#class Kikkanji < KDE::PanelApplet;end
