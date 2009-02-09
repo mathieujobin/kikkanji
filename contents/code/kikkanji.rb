@@ -12,7 +12,8 @@ require 'rubygems'
 require 'activerecord'
 require 'plasma_applet'
 
-DB_FILE = 'contents/code/kanji.kexi'
+DB_FILE = '/home/mjobin/.kde/share/apps/plasma/plasmoids/kikkanji/contents/code/kanji.kexi'
+#DB_FILE = package.path + 'contents/code/kanji.kexi'
 ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => DB_FILE)
 class Kanji < ActiveRecord::Base
 end
@@ -27,6 +28,8 @@ class Kikkanji < PlasmaScripting::Applet
 
 	def initialize parent
 		super parent
+		#Qt.debug_level = 2
+		#GC.disable
 	end
 
 	def init
@@ -39,29 +42,36 @@ class Kikkanji < PlasmaScripting::Applet
 		@reordered_ids = array_of_id.sort_by { rand }
 		@current = 0
 		@cur_text = "haha"
-		#info self
-		#info applet_script
-		#info applet_script.applet
-		#info applet_script.applet.window
-		@font = Qt::Font.new('Helvetica', applet_script.applet.size.width/2)
+ 		#info self
+ 		#info applet_script
+ 		#info applet_script.applet
+ 		#info applet_script.applet.window
 
 		display_new_kanji
 
-		data = Plasma::ToolTipContent.new
-		data.mainText = @cur_text
-		data.subText = @tooltip_content
-		#Plasma::ToolTipManager::self.set_font(applet_script.applet, @font)
-		#data.image = KIcon("some-icon").pixmap(IconSize(KIconLoader::Desktop))
-		Plasma::ToolTipManager::self.set_content(applet_script.applet, data)
-
+		##applet_script.startTimer
 	end
 
-	def resizeEvent(e)
-		puts ["resized ", e].inspect
-		@font = Qt::Font.new('Helvetica', applet_script.applet.size.width/2)
+	def constraintsEvent(e)
+		#puts ["y resized ", e].inspect
+		@font = Qt::Font.new('Helvetica', applet_script.applet.size.width/2.2)
+		update
 	end
+
 	def mouseReleaseEvent(e)
+		if Qt::ShiftModifier.to_i == (e.modifiers & Qt::ShiftModifier.to_i)
+			if @current == 0
+				@current = @kanjis.size 
+			elsif @current == 1
+				@current = @kanjis.size - 1 
+			else
+				@current = @current - 2
+			end
+			
+		end
 		display_new_kanji
+		#puts [e.button, e.buttons, e.modifiers].inspect
+		#info e
 	end
 	def mouseMoveEvent(e); end
 	def mousePressEvent(e); end
@@ -84,6 +94,14 @@ class Kikkanji < PlasmaScripting::Applet
 		content_attr = k.attributes.collect{|k,v| "<b>#{k}</b>:#{v}" unless v.to_s.empty? }.join('</li><li>')
 		content_attr = "<ul><li>#{content_attr}</li></ul>" unless content_attr.to_s.empty?
 		@tooltip_content = "<p><h1>#{ji}</h1>#{content_attr}</p>"
+
+		data = Plasma::ToolTipContent.new
+		data.mainText = @cur_text
+		data.subText = @tooltip_content
+		#Plasma::ToolTipManager::self.set_font(applet_script.applet, @font)
+		#data.image = KIcon("some-icon").pixmap(IconSize(KIconLoader::Desktop))
+		Plasma::ToolTipManager::self.set_content(applet_script.applet, data)
+
 		@current = @current.nil? ? 1 : @current + 1
 		update
 	end
