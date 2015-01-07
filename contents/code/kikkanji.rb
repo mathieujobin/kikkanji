@@ -1,9 +1,3 @@
-# Mathieu Jobin - 2009-02-04 - GPL
-# 2006.05.16 : First version QtRuby 3
-#              goal was to be a kicker applet but QtRuby was not ready at the time so I made a main window.
-# 2008-12-28 : imported code into svn
-# 2009-02-04 : Debut port to plasma
-# 2009-02-06 : First working stable version (missing is the resize event, a timer, a config dialog and a plasma app icon)
 #/usr/bin/env ruby -w
 
 if RUBY_VERSION.match(/^1.8/)
@@ -58,9 +52,9 @@ class Kikkanji < PlasmaScripting::Applet
 	def mouseReleaseEvent(e)
 		if Qt::ShiftModifier.to_i == (e.modifiers & Qt::ShiftModifier.to_i)
 			if @current == 0
-				@current = @kanjis.size 
+				@current = @kanjis.size
 			elsif @current == 1
-				@current = @kanjis.size - 1 
+				@current = @kanjis.size - 1
 			else
 				@current = @current - 2
 			end
@@ -102,4 +96,3 @@ class Kikkanji < PlasmaScripting::Applet
 
 end
 end
-
