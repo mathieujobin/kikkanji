@@ -1,12 +1,19 @@
 #/usr/bin/env ruby -w
 
 if RUBY_VERSION.match(/^1.8/)
+  # Japanese Support in Ruby 1.8
   $KCODE = 'u'
   require 'jcode'
-  require 'rubygems'
 end
+
+require 'rubygems'
 require 'sqlite3'
-require 'activerecord'
+begin
+  require 'activerecord'
+rescue LoadError
+  require 'active_record'
+end
+require 'korundum4'
 require 'plasma_applet'
 
 class Kanji < ActiveRecord::Base
@@ -17,7 +24,7 @@ def info(anything)
 end
 
 module Kikkanji
-class Kikkanji < PlasmaScripting::Applet
+class Kikkanji < Plasma::Applet
 	attr_accessor :kanjis, :reordered_ids, :current, :text_codec
 
 	def initialize parent
