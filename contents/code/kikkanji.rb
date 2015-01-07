@@ -6,9 +6,12 @@
 # 2009-02-06 : First working stable version (missing is the resize event, a timer, a config dialog and a plasma app icon)
 #/usr/bin/env ruby -w
 
-$KCODE = 'u'
-require 'jcode'
-require 'rubygems'
+if RUBY_VERSION.match(/^1.8/)
+  $KCODE = 'u'
+  require 'jcode'
+  require 'rubygems'
+end
+require 'sqlite3'
 require 'activerecord'
 require 'plasma_applet'
 
