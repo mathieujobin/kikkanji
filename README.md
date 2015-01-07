@@ -8,6 +8,12 @@ it requires KDE 4.2 and Plasma. it is written in Ruby, so it requries QtRuby/Kor
 
 Package is not distribution specific.
 
+# Dependencies Ubuntu 14.04
+```bash
+sudo apt-get install korundum4 plasma-scriptengine-ruby sqlite3 libsqlite3-dev ruby-dev
+sudo gem install activerecord sqlite3
+```
+
 # Dependencies Ubuntu 12.04
 ```bash
 sudo apt-get install rubygems korundum4 plasma-scriptengine-ruby sqlite3 libsqlite3-ruby1.8 libsqlite3-ruby libsqlite3-dev
@@ -16,6 +22,7 @@ sudo gem install activerecord sqlite3
 (note that korundum4 was called libkorundum4-ruby1.8 before 4.5)
 
 # Manual Install
+Download off http://kde-apps.org/content/show.php/kikkanji?content=99711
 ```bash
 $ plasmapkg -i 99711-kikkanji.zip
 ```

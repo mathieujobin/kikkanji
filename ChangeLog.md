@@ -3,6 +3,7 @@
  - Convert SVN repo to Git - Publish on Github
  - Create README and ChangeLog from kde-apps description
  - Clean up README and ChangeLog
+ - Update dependencies for Ubuntu 14.04
 
 ## 2012.06.08
  - tested under ubuntu 12.04 with KDE 4.8.3 and ruby 1.8.7 p352
