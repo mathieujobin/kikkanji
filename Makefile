@@ -1,4 +1,6 @@
-all:
+all: build install run
+
+build:
 	[ -f kikkanji.zip ] && rm kikkanji.zip || echo 'start'
 	zip kikkanji.zip \
 	contents/code/kikkanji.rb \
