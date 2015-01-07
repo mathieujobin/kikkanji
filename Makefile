@@ -1,11 +1,18 @@
-#  534  zip -r kikkanji.zip -x .svn/* contents/ metadata.desktop
-#all:
- rm kikkanji.zip
- zip kikkanji.zip \
-     contents/code/kikkanji.rb \
-     contents/code/kanji.kexi \
-     metadata.desktop
- plasmapkg -r kikkanji
- plasmapkg -i kikkanji.zip
- plasmoidviewer -c desktop kikkanji
+all:
+	[ -f kikkanji.zip ] && rm kikkanji.zip || echo 'start'
+	zip kikkanji.zip \
+	contents/code/kikkanji.rb \
+	contents/code/kanji.kexi \
+	kanji.svg metadata.desktop
 
+install:
+	plasmapkg -r kikkanji
+	plasmapkg -i kikkanji.zip
+
+run:
+	plasma-windowed kikkanji
+
+overwrite:
+	mkdir -p ~/.kde/share/apps/plasma/plasmoids/kikkanji/contents/code
+	cp contents/code/kikkanji.rb contents/code/kanji.kexi ~/.kde/share/apps/plasma/plasmoids/kikkanji/contents/code/
+	cp metadata.desktop ~/.kde/share/apps/plasma/plasmoids/kikkanji/
