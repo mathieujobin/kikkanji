@@ -23,7 +23,7 @@ $ plasmapkg -i 99711-kikkanji.zip
 # Screenshots
 
 ![Kikkanji under KDE 4.2](http://kde-apps.org/CONTENT/content-pre1/99711-1.png "Kikkanji under KDE 4.2")
-![Kikkanji under KDE 4.5](http://kde-apps.org/CONTENT/content-pre1/99711-2.png "Kikkanji under KDE 4.5")
+![Kikkanji under KDE 4.5](http://kde-apps.org/CONTENT/content-pre2/99711-2.png "Kikkanji under KDE 4.5")
 
 # Troubleshooting
 if the plasmoid does not load, you might need to add an underscore on the
